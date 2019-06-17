@@ -1,0 +1,19 @@
+<h1>This is the home page</h1>
+<button id="scraper">Scrape!</button>
+
+{{!-- Generate the list of scraped items if the items exist --}}
+
+{{#if result}}
+<div class="container">
+  {{#each result}}
+  <div class="content-wrapper">
+    <div class="title">
+      <a href="{{ url }}" target="_blank">{{ title }}</a>
+    </div>
+    <div class="brief">
+      <p>{{ brief }}</p>
+    </div>
+  </div>
+  {{/each}}
+</div>
+{{/if}}
