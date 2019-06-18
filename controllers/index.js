@@ -13,7 +13,6 @@ router.get('/', (req, res) => {
   db.Article.find({})
     .then(result => {
       // If any Articles are found, send them to the client
-      console.log(result);
       res.render('index', { result });
     })
     .catch(err => {
@@ -54,10 +53,12 @@ router.get('/scrape', (req, res) => {
           // Sends a success message to the browser once complete
           res.send('success');
         })
+        // Catch axios errors
         .catch(err => {
           if (err) res.send(err);
         });
     })
+    // Catch mongoose errors
     .catch(err => console.log(err));
 });
 
