@@ -18,6 +18,10 @@ const articleSchema = new Schema({
     type: String,
     required: true
   },
+  saved: {
+    type: Boolean,
+    default: false
+  },
   // Create a reference to a possible note
   note: {
     type: Schema.Types.ObjectId,
