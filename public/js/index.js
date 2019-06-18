@@ -48,6 +48,9 @@ $(function () {
       url: `/toggleSaved/${id}`
     }).done(function (msg) {
       console.log(msg);
+      if (window.location.pathname === '/saved') {
+        window.location.reload(true);
+      };
     });
 
     if (state === 'unsaved') {

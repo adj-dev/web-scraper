@@ -25,7 +25,16 @@ router.get('/', (req, res) => {
 
 // GET route for saved articles
 router.get('/saved', (req, res) => {
-  res.render('saved');
+  // Send out a request to the database and retrieve all - if any - saved articles.
+  db.Article.find({ saved: true })
+    .then(result => {
+      // If any Articles are found, send them to the client
+      res.render('saved', { result });
+    })
+    .catch(err => {
+      // If an error occurs, send it back to the client
+      res.json(err);
+    });
 });
 
 

@@ -1,1 +1,27 @@
 <h1>Saved Articles</h1>
+
+{{!-- Generate the list of scraped items if the items exist --}}
+
+{{#if result}}
+<div class="container">
+  {{#each result}}
+  <div class="content-wrapper">
+    <div class="title">
+      <h3>
+        <a href="{{ url }}" target="_blank">{{ title }}</a>
+      </h3>
+    </div>
+    <div class="brief">
+      <p>{{ brief }}</p>
+    </div>
+    <div class="save-button">
+      {{#if saved }}
+      <button id="toggleSave" data-state="saved" data-id="{{ _id }}">unsave</button>
+      {{else}}
+      <button id="toggleSave" data-state="unsaved" data-id="{{ _id }}">save</button>
+      {{/if}}
+    </div>
+  </div>
+  {{/each}}
+</div>
+{{/if}}
