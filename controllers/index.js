@@ -64,5 +64,32 @@ router.get('/scrape', (req, res) => {
 
 
 
+// Handles requests to update the `saved` field for an Article
+router.put('/toggleSaved/:id', (req, res) => {
+  // Capture the document id from the request
+  let { id } = req.params;
+
+  // Find the concerned document
+  db.Article.findById(id, (err, doc) => {
+    if (err) {
+      return console.log(err);
+    }
+
+    // Update the value of the `saved` field
+    if (!doc.saved) {
+      doc.saved = true;
+    } else {
+      doc.saved = false;
+    }
+
+    // Save the changes
+    doc.save();
+  });
+
+  // Return a success message
+  res.send('Successfully updated `saved` field');
+});
+
+
 // Export the router as a module
 module.exports = router;

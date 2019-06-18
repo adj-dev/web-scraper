@@ -31,6 +31,13 @@ const articleSchema = new Schema({
 
 
 
+// A custom method that allows the app to toggle the saved property
+articleSchema.methods.toggleSaved = function () {
+  this.saved = !this.saved;
+}
+
+
+
 // Create the Article model
 const Article = mongoose.model('Article', articleSchema);
 

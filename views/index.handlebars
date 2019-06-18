@@ -17,7 +17,11 @@
       <p>{{ brief }}</p>
     </div>
     <div class="save-button">
-      <button id="toggleSave" data-state="unsaved">save</button>
+      {{#if saved }}
+      <button id="toggleSave" data-state="saved" data-id="{{ _id }}">unsave</button>
+      {{else}}
+      <button id="toggleSave" data-state="unsaved" data-id="{{ _id }}">save</button>
+      {{/if}}
     </div>
   </div>
   {{/each}}

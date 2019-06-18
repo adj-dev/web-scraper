@@ -38,11 +38,19 @@ $(function () {
 
   // Add an event listener for the `save` button
   $(document).on('click', '#toggleSave', function () {
-    // Capture the `data-state` attribute from the target element
+    // Capture the `data-state` and `data-id` attributes from the target element
     let state = $(this).attr('data-state');
+    let id = $(this).attr('data-id');
+
+    // Make a call to the server for updating the document
+    $.ajax({
+      method: 'PUT',
+      url: `/toggleSaved/${id}`
+    }).done(function (msg) {
+      console.log(msg);
+    });
 
     if (state === 'unsaved') {
-
       // Toggle the appearance and attribute values of the button
       $(this).text('unsave');
       $(this).attr('data-state', 'saved');
