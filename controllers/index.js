@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
   // Send out a request to the database and retrieve all - if any - scraped articles.
   db.Article.find({})
     .then(result => {
-      // If any Books are found, send them to the client
+      // If any Articles are found, send them to the client
       console.log(result);
       res.render('index', { result });
     })
@@ -20,8 +20,6 @@ router.get('/', (req, res) => {
       // If an error occurs, send it back to the client
       res.json(err);
     });
-
-  // res.render('index');
 });
 
 
