@@ -2,18 +2,15 @@
 const express = require('express');
 const axios = require('axios');
 const cheerio = require('cheerio');
+const db = require('../models');
 const router = express.Router();
-
-
-// require the Article model -- testing stage
-const Article = require('../models/Article.js');
 
 
 
 // Define all routes
 router.get('/', (req, res) => {
   // Send out a request to the database and retrieve all - if any - scraped articles.
-  Article.find({})
+  db.Article.find({})
     .then(result => {
       // If any Books are found, send them to the client
       console.log(result);
@@ -31,31 +28,39 @@ router.get('/', (req, res) => {
 
 // Route used for initializing web-scrape
 router.get('/scrape', (req, res) => {
-  axios.get('https://www.infoworld.com/category/web-development/')
-    .then(response => {
-      let $ = cheerio.load(response.data);
+  // First things first: remove current entries from the database to avoid repeats
+  db.Article.deleteMany()
+    .then(() => {
+      axios.get('https://www.infoworld.com/category/web-development/')
+        .then(response => {
+          // Use the power of cheerio to capture all the html of the target site
+          let $ = cheerio.load(response.data);
 
-      $('.river-well').each((i, element) => {
-        // Grab all relevant info from cheerio
-        let title = $(element).find('a').text();
-        let brief = $(element).find('h4').text();
-        let url = $(element).find('a').attr('href');
+          // Iterate over a specified portion of the target site
+          $('.river-well').each((i, element) => {
+            // Grab all relevant info from cheerio
+            let title = $(element).find('a').text();
+            let brief = $(element).find('h4').text();
+            let url = $(element).find('a').attr('href');
 
-        // Infoworld.com provides a partial href so the missing part must be concatenated manually
-        url = 'https://www.infoworld.com' + url;
+            // Infoworld.com provides a partial href so the missing part must be concatenated manually
+            url = 'https://www.infoworld.com' + url;
 
-        // Wrap the package (es6 style)
-        let package = { title, brief, url };
+            // Wrap the package (es6 style)
+            let package = { title, brief, url };
 
-        // Send our neatly arranged package off to the db to be sorted
-        Article.create(package).then(result => console.log(result)).catch(err => console.log(err));
-      });
+            // Send our neatly arranged package off to the db to be sorted
+            db.Article.create(package).then(result => console.log(result)).catch(err => console.log(err));
+          });
 
-      res.send('success');
+          // Sends a success message to the browser once complete
+          res.send('success');
+        })
+        .catch(err => {
+          if (err) res.send(err);
+        });
     })
-    .catch(err => {
-      if (err) res.send(err);
-    });
+    .catch(err => console.log(err));
 });
 
 
