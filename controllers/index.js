@@ -7,7 +7,7 @@ const router = express.Router();
 
 
 
-// Define all routes
+// Define route for homepage
 router.get('/', (req, res) => {
   // Send out a request to the database and retrieve all - if any - scraped articles.
   db.Article.find({})
@@ -19,6 +19,13 @@ router.get('/', (req, res) => {
       // If an error occurs, send it back to the client
       res.json(err);
     });
+});
+
+
+
+// GET route for saved articles
+router.get('/saved', (req, res) => {
+  res.render('saved');
 });
 
 
