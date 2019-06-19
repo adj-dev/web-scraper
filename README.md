@@ -7,4 +7,8 @@ Click on the scrape button to generate a list of articles from [infoworld.com](h
 
 ### Adding notes
 
-If you don't enter a name the author of the note will be set to "anonymous".
+When adding a note you will be asked to enter your name in addition to the note. Because there is no authentication anyone who visits the site has access to the note and can edit it at will: this is the nature of this application. Once a note is created, it can be edited or deleted. Unsaving an article will also delete a note.
+
+### Additional mentions
+
+Once a user hits the 'scrape' button there is no way to clear out the results unless I manually clear out the db. That being said, if there are no scrape results in the database then the user will see a message that says, "Scrape to populate this page". Likewise, the user will find a "Save some articles to populate this page" message on the page of saved articles if no articles have been saved. 
