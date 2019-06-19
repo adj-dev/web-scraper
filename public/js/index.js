@@ -94,8 +94,8 @@ $(function () {
   // Add an event listener for the `addNote` button (also used for updating notes)
   $(document).on('click', '#addNote', function () {
     // Capture name and content from inputs
-    let name = $('#noteName').val().trim();
-    let content = $('#noteContent').val().trim();
+    let name = $(this).parent().children('#noteName').val().trim();
+    let content = $(this).parent().children('#noteContent').val().trim();
     // Capture id of Article
     let id = $(this).attr('data-id');
 
@@ -138,17 +138,19 @@ $(function () {
     // `divId` is the id of the edit comment div
     let divId = $(`#${id}`).attr('data-ref')
     // Change the text of the `add` button
-    $('#addNote').text('Update');
+    $(`#${divId}`).children('#addNote').text('Update');
     // Hide the comment div
     $(`#${id}`).hide();
     // Show the add/edit div
     $(`#${divId}`).show();
     // Populate the inputs with the current note data
-    let content = $(`#${id}`).children('p').text();
-    let name = $(`#${id}`).children('span').text();
+    let content = $(`[data-ref='${divId}'`).children('p').text();
+    let name = $(`[data-ref='${divId}'`).children('span').text();
+    console.log(content);
+    console.log(name);
 
-    $('#noteName').val(name);
-    $('#noteContent').val(content);
+    $(`#${divId}`).children('#noteName').val(name);
+    $(`#${divId}`).children('#noteContent').val(content);
   });
 
 
