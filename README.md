@@ -12,3 +12,7 @@ When adding a note you will be asked to enter your name in addition to the note.
 ### Additional mentions
 
 Once a user hits the 'scrape' button there is no way to clear out the results unless I manually clear out the db. That being said, if there are no scrape results in the database then the user will see a message that says, "Scrape to populate this page". Likewise, the user will find a "Save some articles to populate this page" message on the page of saved articles if no articles have been saved. 
+
+### Random "hide" button
+
+You will notice a button that toggles the visibility of the main container div. This was an early implementation of some obscure idea that escapes me at the time of this writing, but I opted to leave it in regardless. So, there you have it: a random, useless button that does something. Have fun with it.
