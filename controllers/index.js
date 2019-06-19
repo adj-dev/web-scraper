@@ -27,7 +27,9 @@ router.get('/', (req, res) => {
 router.get('/saved', (req, res) => {
   // Send out a request to the database and retrieve all - if any - saved articles.
   db.Article.find({ saved: true })
+    .populate('note') // include each articles note (if it has one)
     .then(result => {
+      console.log(result);
       // If any Articles are found, send them to the client
       res.render('saved', { result });
     })
@@ -41,8 +43,8 @@ router.get('/saved', (req, res) => {
 
 // Route used for initializing web-scrape
 router.get('/scrape', (req, res) => {
-  // First things first: remove current entries from the database to avoid repeats
-  db.Article.deleteMany()
+  // First things first: remove unsaved entries from the database to avoid repeats
+  db.Article.deleteMany({ saved: false })
     .then(() => {
       axios.get('https://www.infoworld.com/category/web-development/')
         .then(response => {
@@ -88,22 +90,81 @@ router.put('/toggleSaved/:id', (req, res) => {
   // Find the concerned document
   db.Article.findById(id, (err, doc) => {
     if (err) {
-      return console.log(err);
+      throw err;
     }
 
     // Update the value of the `saved` field
     if (!doc.saved) {
       doc.saved = true;
     } else {
+      // Remove the note associated with the article if it exists
+      if (doc.note) {
+        db.Note.findByIdAndDelete(doc.note)
+          .then(result => {
+            json.res(result);
+          })
+          .catch(err => {
+            json.res(err);
+          });
+      }
+
       doc.saved = false;
     }
 
+
+
     // Save the changes
     doc.save();
+  }).then(() => {
+    // Return a success message
+    res.send('Successfully updated `saved` field');
   });
 
-  // Return a success message
-  res.send('Successfully updated `saved` field');
+});
+
+
+
+// Handles creating a note
+router.post('/note/:id', (req, res) => {
+  // Create the note
+  db.Note.create(req.body)
+    .then(response => {
+      // Update the concerned article so it holds a reference to the note
+      return db.Article.findByIdAndUpdate(req.params.id, { $set: { note: response._id } }, { new: true });
+    })
+    .then(response => {
+      res.json(response)
+    })
+    .catch(err => {
+      res.json(err);
+    });
+});
+
+
+
+// Handles updating a note
+router.put('/note/:id', (req, res) => {
+  // Update the note
+  db.Note.findByIdAndUpdate(req.params.id, { $set: { name: req.body.name, content: req.body.content } }, { new: true })
+    .then(result => {
+      res.json(result);
+    })
+    .catch(err => {
+      res.json(err);
+    });
+});
+
+
+
+// Handles deleting a comment
+router.post('/note/delete/:id', (req, res) => {
+  db.Note.findByIdAndDelete(req.params.id)
+    .then(result => {
+      res.json(result);
+    })
+    .catch(err => {
+      res.json(err);
+    });
 });
 
 

@@ -15,12 +15,32 @@
       <p>{{ brief }}</p>
     </div>
     <div class="save-button">
-      {{#if saved }}
       <button id="toggleSave" data-state="saved" data-id="{{ _id }}">unsave</button>
-      {{else}}
-      <button id="toggleSave" data-state="unsaved" data-id="{{ _id }}">save</button>
-      {{/if}}
     </div>
+    {{#unless note}}
+    <div class="note-button">
+      <button id="toggleNote" data-id="{{ _id }}" data-state="hidden">Add Note</button>
+    </div>
+    {{/unless}}
+
+
+    <div class="edit-container" id="{{ _id }}">
+      <span>Your name: </span>
+      <input type="text" id="noteName" />
+      <span>Note: </span>
+      <input type="text" id="noteContent" />
+      <button id="addNote" data-id="{{ _id }}">Add</button>
+    </div>
+
+
+    {{#if note }}
+    <div class="comment-container" id="{{note._id}}" data-ref="{{_id}}">
+      <p>{{note.content}}</p>
+      <span>Created by {{note.name}}</span>
+      <button id="editNote" data-id="{{note._id}}">Edit</button>
+      <button id="deleteNote" data-id="{{note._id}}">Delete</button>
+    </div>
+    {{/if}}
   </div>
   {{/each}}
 </div>

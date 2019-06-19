@@ -8,7 +8,8 @@ const Schema = mongoose.Schema;
 const articleSchema = new Schema({
   title: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   brief: {
     type: String,
@@ -28,13 +29,6 @@ const articleSchema = new Schema({
     ref: 'Note'
   }
 });
-
-
-
-// A custom method that allows the app to toggle the saved property
-articleSchema.methods.toggleSaved = function () {
-  this.saved = !this.saved;
-}
 
 
 
