@@ -13,8 +13,8 @@ const PORT = process.env.PORT || 3000;
 
 
 // Dev-dependencies (set up morgan)
-const morgan = require('morgan');
-app.use(morgan('dev'));
+// const morgan = require('morgan');
+// app.use(morgan('dev'));
 
 
 
